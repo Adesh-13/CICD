@@ -33,7 +33,7 @@ jobs:
           xcodebuild clean build \
             -project CICD.xcodeproj \
             -scheme CICD \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=18.5' \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.5' \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 
       - name: Run unit tests
@@ -41,5 +41,5 @@ jobs:
           xcodebuild test \
             -project CICD.xcodeproj \
             -scheme CICD \
-            -destination 'platform=iOS Simulator,,name=iPhone 14,OS=18.5' \
+            -destination 'platform=iOS Simulator,,name=iPhone 16,OS=18.5' \
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
