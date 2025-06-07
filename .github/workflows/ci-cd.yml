@@ -1,0 +1,42 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build and Test (iOS)
+    runs-on: macos-14  # macos-latest will also work, but macos-14 ensures Xcode 16.4
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set Xcode version
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app
+          xcodebuild -version
+
+      - name: Install dependencies
+        run: |
+          brew install swiftlint || echo "SwiftLint already installed"
+          pod install || echo "No Podfile found"
+
+      - name: Build project
+        run: |
+          xcodebuild clean build \
+            -project CICD.xcodeproj \
+            -scheme CICD \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+
+      - name: Run unit tests
+        run: |
+          xcodebuild test \
+            -project CICD.xcodeproj \
+            -scheme CICD \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
